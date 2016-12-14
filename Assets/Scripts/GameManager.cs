@@ -32,12 +32,15 @@ public class GameManager : MonoBehaviour {
 
 	}
 
-	void InitGame(){
+	public void InitGame(){
 		boardScript.SetupScene (level);
 	}
 
-	// Update is called once per frame
-	void Update () {
-
+	public void ReloadGame(){
+		//Destroy (GetComponent<BoardManager> ());
+		Debug.Log ("reloadgame");
+		boardScript = GetComponent<BoardManager> ();
+		boardScript.SetupScene (level);
 	}
+		
 }

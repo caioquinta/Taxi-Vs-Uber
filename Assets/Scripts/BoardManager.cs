@@ -22,18 +22,24 @@ public class BoardManager : MonoBehaviour {
 	public DropZoneController dropzoneController;
 
 	public int totalActiveObjectives = 3;
+	public int time = 5;
 
 	//UI
 	public Text player1CountDownText;
 	public Text player2CountDownText;
 
-	void Start () {
+	void SetCountDown(){
+		time = 90;
 		player1CountDownText = GameObject.Find ("Player1Countdown").GetComponent<Text>();
 		player2CountDownText = GameObject.Find ("Player2Countdown").GetComponent<Text>();
-
-		StartCoroutine ("Countdown", 90);
+		Debug.Log ("start");
+		StartCoroutine ("Countdown", time);
 	}
 
+	void setCountdownText(int time){
+		player1CountDownText.text = time.ToString();
+		player2CountDownText.text = time.ToString();
+	}
 
 	private IEnumerator Countdown(int time){
 		while(time > 0){
@@ -47,15 +53,11 @@ public class BoardManager : MonoBehaviour {
 		}
 	}
 		
-	void setCountdownText(int time){
-		player1CountDownText.text = time.ToString();
-		player2CountDownText.text = time.ToString();
-	}
-
 	void InitialiseList()
 	{
 		objectives.Clear ();
 		activePassengers.Clear ();
+		Debug.Log ("initialise list");
 		objectives = Objective.LoadAll ();
 	}
 
@@ -63,6 +65,7 @@ public class BoardManager : MonoBehaviour {
 	{
 		GameObject newPassenger;
 		GameObject newDropzone;
+		Debug.Log ("layout objectives");
 		for (int i=0; i < objectives.Count (); i++) {
 			Vector3 passengerPos = objectives [i].GetPassengerPosition();
 			newPassenger =  (GameObject) Instantiate (passenger, passengerPos, Quaternion.identity);
@@ -102,6 +105,7 @@ public class BoardManager : MonoBehaviour {
 
 	public void SetupScene(int level)
 	{
+		SetCountDown ();
 		InitialiseList ();
 		LayoutAllObjectives ();
 	}
