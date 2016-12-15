@@ -31,7 +31,7 @@ public class PassengerController : MonoBehaviour {
 	public void ChangeColor(){
 		passengerSprite = GetComponent<SpriteRenderer> ();
 		if (GameManager.gameMode == GameManager.MONEYMAKER) {
-			switch (BoardManager.objectives [id].GetMoney()) {
+			switch (GameManager.objectives [id].GetMoney()) {
 			case GameManager.LOW_PRICE:
 				passengerSprite.color = Color.green;
 				break;

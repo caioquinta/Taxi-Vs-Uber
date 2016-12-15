@@ -38,7 +38,7 @@ public class DirectionUIController : MonoBehaviour {
 			if ( minDist > dist) {
 				minDist = dist;
 				id = BoardManager.activePassengers[i].GetId();
-				changePassengerAvatar(BoardManager.objectives[id].GetMoney());
+				changePassengerAvatar(GameManager.objectives[id].GetMoney());
 			}
 		}
 		rotateArrow (passengers [id].transform.position);
@@ -101,7 +101,7 @@ public class DirectionUIController : MonoBehaviour {
 		if (GameManager.gameMode == GameManager.DELIVERY) {
 			points++;
 		} else 
-			points += BoardManager.objectives [id].GetMoney ();
+			points += GameManager.objectives [id].GetMoney ();
 	}
 
 	public void SetCountText(){

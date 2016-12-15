@@ -12,28 +12,24 @@ using System.Text.RegularExpressions;
 
 public class BoardManager : MonoBehaviour {
 
-	public static List <Objective> objectives = new List<Objective> ();
 	public static List<PassengerController> activePassengers = new List<PassengerController> ();
 
-	public GameObject passenger;
+	public int totalActiveObjectives = 3;
+	public const int TIME = 90;
+
 	public PassengerController passengerController;
+	public GameObject passenger;
 
 	public GameObject dropzone;
-	public DropZoneController dropzoneController;
-
-	public int totalActiveObjectives = 3;
-	public int time = 5;
 
 	//UI
 	public Text player1CountDownText;
 	public Text player2CountDownText;
 
 	void SetCountDown(){
-		time = 90;
 		player1CountDownText = GameObject.Find ("Player1Countdown").GetComponent<Text>();
 		player2CountDownText = GameObject.Find ("Player2Countdown").GetComponent<Text>();
-		Debug.Log ("start");
-		StartCoroutine ("Countdown", time);
+		StartCoroutine ("Countdown", TIME);
 	}
 
 	void setCountdownText(int time){
@@ -52,31 +48,21 @@ public class BoardManager : MonoBehaviour {
 			SceneManager.LoadScene ("GameOver");
 		}
 	}
-		
-	void InitialiseList()
-	{
-		objectives.Clear ();
-		activePassengers.Clear ();
-		Debug.Log ("initialise list");
-		objectives = Objective.LoadAll ();
-	}
 
 	void LayoutAllObjectives()
 	{
 		GameObject newPassenger;
 		GameObject newDropzone;
-		Debug.Log ("layout objectives");
-		for (int i=0; i < objectives.Count (); i++) {
-			Vector3 passengerPos = objectives [i].GetPassengerPosition();
+		for (int i=0; i < GameManager.objectives.Count (); i++) {
+			Vector3 passengerPos = GameManager.objectives [i].GetPassengerPosition();
 			newPassenger =  (GameObject) Instantiate (passenger, passengerPos, Quaternion.identity);
-
-			newPassenger.GetComponent<PassengerController> ().SetId (objectives [i].GetId());
+			newPassenger.GetComponent<PassengerController> ().SetId ( GameManager.objectives [i].GetId());
 			newPassenger.GetComponent<PassengerController> ().Toogle ();
 			newPassenger.GetComponent<PassengerController> ().ChangeColor ();
 
-			Vector3 dropzonePos = objectives [i].GetDropzonePosition();
+			Vector3 dropzonePos = GameManager.objectives [i].GetDropzonePosition();
 			newDropzone = (GameObject) Instantiate (dropzone, dropzonePos, Quaternion.identity);
-			newDropzone.GetComponent<DropZoneController> ().SetId (objectives [i].GetId());
+			newDropzone.GetComponent<DropZoneController> ().SetId (GameManager.objectives [i].GetId());
 		}
 		for (int i=0; i < totalActiveObjectives; i++)
 			ActivatePassengerAtRandom ();
@@ -85,28 +71,34 @@ public class BoardManager : MonoBehaviour {
 	public void ActivatePassengerAtRandom(){
 		bool isActive = true;
 		while (isActive) {
-			int objectCount = Random.Range (0, objectives.Count () - 1 ); 
+			int objectCount = Random.Range (0, GameManager.objectives.Count () - 1 ); 
 			passenger = GameObject.FindGameObjectsWithTag("Passenger")[objectCount];
 			passengerController = passenger.GetComponent<PassengerController>();
 			isActive = passengerController.active;
 		}
-
 		passengerController.Toogle();
 		activePassengers.Add (passengerController);
 	}
 
-
 	public void ActivateDropZone(int id){
+		GameObject dropzone;
+		DropZoneController dropzoneController;
+	
 		dropzone = GameObject.FindGameObjectsWithTag("Dropzone")[id];
 		dropzoneController = dropzone.GetComponent<DropZoneController>();
 		dropzoneController.Toogle();
 	}
-
+		
+	public void LoadResources (){
+		passenger = Resources.Load ("Passenger") as GameObject;
+		dropzone = Resources.Load ("Dropzone") as GameObject;
+	}
 
 	public void SetupScene(int level)
 	{
+		LoadResources ();
 		SetCountDown ();
-		InitialiseList ();
+		activePassengers.Clear ();
 		LayoutAllObjectives ();
 	}
 }

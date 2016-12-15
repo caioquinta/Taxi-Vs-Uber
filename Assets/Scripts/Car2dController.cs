@@ -106,7 +106,7 @@ public class Car2dController : MonoBehaviour {
 	}
 
 	int Break(String input){
-		rb2d.AddForce (transform.up * -speedForce / 5f);
+		rb2d.AddForce (transform.up * -speedForce / 2.5f);
 		return BACKWARDS;
 	}
 

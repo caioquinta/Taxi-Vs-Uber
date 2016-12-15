@@ -10,8 +10,7 @@ public class Loader : MonoBehaviour {
 		if (GameManager.instance == null) {
 			Instantiate (gameManager);
 		} else {
-			Debug.Log ("teste");
-			GameManager.instance.InitGame ();
+			GameManager.instance.ReloadGame ();
 		}
 	}
 }

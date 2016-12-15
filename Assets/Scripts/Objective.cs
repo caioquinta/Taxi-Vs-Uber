@@ -69,6 +69,7 @@ public class Objective{
 			int money =  int.Parse(values[4]);
 			objective.SetMoney (money);
 			objectives.Add (objective);
+			Debug.Log (objective);
 		}
 		return objectives;
 	}
